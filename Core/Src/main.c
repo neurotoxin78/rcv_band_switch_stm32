@@ -48,7 +48,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint8_t Enc_Counter = 0;
+extern volatile uint8_t buttonPressed[5];
 int32_t prevCounter = 0;
 /* USER CODE END PV */
 
@@ -60,7 +60,7 @@ static void setPWM(TIM_HandleTypeDef, uint32_t, uint16_t, uint16_t);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void init() {
+void display_init() {
     ST7735_Init();
     // Check border
     ST7735_FillScreen(ST7735_BLACK);
@@ -89,19 +89,16 @@ void loop() {
 		ST7735_WriteString(0, 46*1, buff, Font_7x10, ST7735_GREEN, ST7735_BLACK);
 		prevCounter = currCounter;
 	}
-
-	/*
 	uint8_t buttonNumber = 0;
 	while(buttonNumber < sizeof(buttonPressed)/sizeof(buttonPressed[0])) {
 		if(buttonPressed[buttonNumber]) {
 			buttonPressed[buttonNumber] = 0;
 			char buff[16];
 			snprintf(buff, sizeof(buff), "BUTTON %d", buttonNumber);
-			ST7735_WriteString(0, 26*0, buff, Font_16x26, ST7735_RED, ST7735_BLACK);
+			ST7735_WriteString(80, 46*1, buff, Font_7x10, ST7735_RED, ST7735_BLACK);
 		}
 		buttonNumber++;
 	}
-*/
     HAL_Delay(100);
 }
 
@@ -146,17 +143,11 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  init();
-  char str[100];
-  char buff[16];
+  display_init();
+
   while (1)
   {
-	 Enc_Counter = TIM3->CNT;
 	 loop();
-
-	 //sprintf(str, "%d", Enc_Counter);
-	 //ST7735_WriteString(1, 45, str, Font_11x18, ST7735_COLOR565(0, 116, 199), ST7735_BLACK);
-
 
     /* USER CODE END WHILE */
 
